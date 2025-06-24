@@ -12,17 +12,25 @@
       text-align: center;
     }
 
+    h1 {
+      font-size: 30px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    #intro {
+      font-size: 18px;
+      max-width: 700px;
+      margin: 0 auto 25px;
+      color: #444;
+    }
+
     img {
-      max-width: 500px;
-      margin: 20px auto;
+      width: 380px;
+      margin: 15px auto;
       display: block;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      font-size: 28px;
-      color: #333;
     }
 
     #gameInfo {
@@ -94,18 +102,22 @@
 
   <h1>🎓 Back to Home: Campus Quest</h1>
 
-  <img src="./ChatGPT Image Jun 24, 2025, 12_23_56 AM.png" alt="Campus Grid Map">
+  <div id="intro">
+    You’ve been randomly dropped off at a building on campus! 🧭  
+    As a kid exploring the area, your mission is to find your way back home to <strong>Trinity Hall</strong>.  
+    Navigate through nearby buildings using the arrows to move north, south, east, or west — and reach your destination safely! 🏠
+  </div>
+
+  <img src="./campus-map.png" alt="Campus Grid Map">
 
   <div id="gameInfo">
     <p><strong>Start Location:</strong> <span id="startLoc"></span> — this is where your journey begins.</p>
-    <p><strong>Current Location:</strong> <span id="currentLoc"></span> — you are here now. Use the buttons to navigate.</p>
+    <p><strong>Current Location:</strong> <span id="currentLoc"></span> — you are here now.</p>
     <p><strong>Steps taken so far:</strong> <span id="stepCount">0</span></p>
   </div>
 
-  <!-- Move result -->
   <div id="output"></div>
 
-  <!-- Direction buttons -->
   <div class="button-container">
     <button onclick="move('n')">⬆ North</button><br>
     <button onclick="move('w')">⬅ West</button>
@@ -113,10 +125,8 @@
     <button onclick="move('s')">⬇ South</button>
   </div>
 
-  <!-- Restart button -->
   <button id="restartBtn" onclick="restartGame()">🔁 Restart Game</button>
 
-  <!-- Path Tracker -->
   <div id="pathTracker"><strong>Path visited:</strong> <span id="pathLog"></span></div>
 
   <script>
@@ -169,11 +179,11 @@
 
       const output = document.getElementById("output");
       output.classList.remove("flash");
-      void output.offsetWidth; // re-trigger animation
+      void output.offsetWidth;
       output.classList.add("flash");
 
       if (current === goal) {
-        output.innerHTML = `<strong>🎉 You reached Trinity Hall in ${steps} steps!</strong>`;
+        output.innerHTML = `<strong>🎉 You reached Trinity Hall in ${steps} steps! Well done!</strong>`;
         document.getElementById("restartBtn").style.display = "inline-block";
       } else {
         output.textContent = `📍 You moved to ${current}`;
@@ -181,7 +191,7 @@
     }
 
     function restartGame() {
-      location.reload(); // simple reload
+      location.reload();
     }
   </script>
 
