@@ -55,6 +55,38 @@
       margin-top: 20px;
       margin-bottom: 10px;
       color: #333;
+      transition: background-color 0.3s ease;
+    }
+
+    .flash {
+      animation: flash-bg 0.5s ease;
+    }
+
+    @keyframes flash-bg {
+      0% { background-color: #fffacd; }
+      100% { background-color: transparent; }
+    }
+
+    #pathTracker {
+      font-size: 16px;
+      margin-top: 15px;
+      color: #555;
+    }
+
+    #restartBtn {
+      display: none;
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #restartBtn:hover {
+      background-color: #66bb6a;
     }
   </style>
 </head>
@@ -70,15 +102,22 @@
     <p><strong>Steps taken so far:</strong> <span id="stepCount">0</span></p>
   </div>
 
-  <!-- OUTPUT message ABOVE buttons -->
+  <!-- Move result -->
   <div id="output"></div>
 
+  <!-- Direction buttons -->
   <div class="button-container">
     <button onclick="move('n')">⬆ North</button><br>
     <button onclick="move('w')">⬅ West</button>
     <button onclick="move('e')">➡ East</button><br>
     <button onclick="move('s')">⬇ South</button>
   </div>
+
+  <!-- Restart button -->
+  <button id="restartBtn" onclick="restartGame()">🔁 Restart Game</button>
+
+  <!-- Path Tracker -->
+  <div id="pathTracker"><strong>Path visited:</strong> <span id="pathLog"></span></div>
 
   <script>
     const campusGrid = [
@@ -90,6 +129,7 @@
     const goal = "TRINITY HALL";
     let playerPos;
     let steps = 0;
+    let path = [];
 
     const buildingMap = {};
     for (let r = 0; r < campusGrid.length; r++) {
@@ -101,9 +141,11 @@
     const buildings = Object.keys(buildingMap).filter(b => b !== goal);
     const start = buildings[Math.floor(Math.random() * buildings.length)];
     playerPos = [...buildingMap[start]];
+    path.push(start);
 
     document.getElementById("startLoc").textContent = start;
     document.getElementById("currentLoc").textContent = start;
+    document.getElementById("pathLog").textContent = start;
 
     function move(dir) {
       let [r, c] = playerPos;
@@ -122,12 +164,24 @@
       const current = campusGrid[r][c];
       document.getElementById("currentLoc").textContent = current;
       document.getElementById("stepCount").textContent = steps;
+      path.push(current);
+      document.getElementById("pathLog").textContent = path.join(" ➜ ");
+
+      const output = document.getElementById("output");
+      output.classList.remove("flash");
+      void output.offsetWidth; // re-trigger animation
+      output.classList.add("flash");
 
       if (current === goal) {
-        document.getElementById("output").innerHTML = `<strong>🎉 You reached Trinity Hall in ${steps} steps!</strong>`;
+        output.innerHTML = `<strong>🎉 You reached Trinity Hall in ${steps} steps!</strong>`;
+        document.getElementById("restartBtn").style.display = "inline-block";
       } else {
-        document.getElementById("output").textContent = `📍 You moved to ${current}`;
+        output.textContent = `📍 You moved to ${current}`;
       }
+    }
+
+    function restartGame() {
+      location.reload(); // simple reload
     }
   </script>
 
