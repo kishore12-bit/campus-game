@@ -5,48 +5,89 @@
   <title>Back to Home - Campus Quest</title>
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      background: #fdf6e3;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #fdf6e3, #f7e9c5);
       margin: 0;
-      padding: 20px;
-      text-align: center;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
-    img {
-      max-width: 500px;
-      margin: 20px auto;
-      display: block;
-    }
+
     h1 {
-      font-size: 28px;
-      color: #333;
+      font-size: 32px;
+      margin-top: 30px;
+      color: #2c3e50;
     }
-    .directions {
-      margin: 15px 0;
+
+    img {
+      max-width: 90%;
+      height: auto;
+      border-radius: 12px;
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    #gameInfo {
+      margin-top: 30px;
       font-size: 18px;
+      color: #444;
+      background: #ffffffcc;
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
+
     .button-container {
-      margin: 20px;
+      margin: 30px 0;
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      grid-gap: 15px;
+      justify-content: center;
+      align-items: center;
     }
+
     button {
       font-size: 18px;
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: #f9cb40;
+      padding: 12px 24px;
+      background-color: #ffcc4d;
+      color: #222;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
+
     button:hover {
-      background-color: #ffdd75;
+      background-color: #ffe191;
+      transform: translateY(-2px);
     }
+
     #output {
-      font-size: 18px;
-      margin-top: 20px;
+      font-size: 20px;
+      color: #2d3436;
+      margin-bottom: 40px;
+      padding: 10px 20px;
+      max-width: 600px;
+    }
+
+    @media (max-width: 600px) {
+      .button-container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 10px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 10px;
+      }
     }
   </style>
 </head>
 <body>
 
+  <h1>🎓 Back to Home: Campus Quest</h1>
   <img src="./ChatGPT Image Jun 24, 2025, 12_23_56 AM.png" alt="Campus Grid Map">
 
   <div id="gameInfo">
@@ -55,67 +96,4 @@
     <p><strong>Steps:</strong> <span id="stepCount">0</span></p>
   </div>
 
-  <div class="button-container">
-    <button onclick="move('n')">⬆ North</button><br>
-    <button onclick="move('w')">⬅ West</button>
-    <button onclick="move('e')">➡ East</button><br>
-    <button onclick="move('s')">⬇ South</button>
-  </div>
-
-  <div id="output"></div>
-
-  <script>
-    const campusGrid = [
-      ["THE COMMONS", "CAPPA NORTH", "NANOTECH BUILDING"],
-      ["MAVERICK ACTIVITIES CENTER", "CAPPA BUILDING", "FINE ARTS"],
-      ["TRINITY HALL", "CAPPA SOUTH", "TEXAS HALL"]
-    ];
-
-    const goal = "TRINITY HALL";
-    let playerPos;
-    let steps = 0;
-
-    // Get all positions
-    const buildingMap = {};
-    for (let r = 0; r < campusGrid.length; r++) {
-      for (let c = 0; c < campusGrid[0].length; c++) {
-        buildingMap[campusGrid[r][c]] = [r, c];
-      }
-    }
-
-    // Choose a random start position (not Trinity Hall)
-    const buildings = Object.keys(buildingMap).filter(b => b !== goal);
-    const start = buildings[Math.floor(Math.random() * buildings.length)];
-    playerPos = [...buildingMap[start]];
-
-    document.getElementById("startLoc").textContent = start;
-    document.getElementById("currentLoc").textContent = start;
-
-    function move(dir) {
-      let [r, c] = playerPos;
-      if (dir === "n") r--;
-      else if (dir === "s") r++;
-      else if (dir === "e") c++;
-      else if (dir === "w") c--;
-
-      if (r < 0 || r > 2 || c < 0 || c > 2) {
-        document.getElementById("output").textContent = "🚫 You can't go that way!";
-        return;
-      }
-
-      playerPos = [r, c];
-      steps++;
-      const current = campusGrid[r][c];
-      document.getElementById("currentLoc").textContent = current;
-      document.getElementById("stepCount").textContent = steps;
-
-      if (current === goal) {
-        document.getElementById("output").innerHTML = `<strong>🎉 You reached Trinity Hall in ${steps} steps!</strong>`;
-      } else {
-        document.getElementById("output").textContent = `You moved to ${current}`;
-      }
-    }
-  </script>
-
-</body>
-</html>
+  <div class="but
