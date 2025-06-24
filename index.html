@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Back to Home Game</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; }
+    #game { margin-top: 30px; }
+    .directions { margin: 10px; }
+    button { padding: 10px 20px; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>🎮 Campus Quest: "Back to Home"</h1>
+  <p>You're trying to reach TRINITY HALL. Use buttons below to move.</p>
+  <div id="game">
+    <p id="location">Loading...</p>
+    <p id="available"></p>
+    <div class="directions">
+      <button onclick="move('n')">⬆ North</button><br>
+      <button onclick="move('w')">⬅ West</button>
+      <button onclick="move('e')">➡ East</button><br>
+      <button onclick="move('s')">⬇ South</button>
+    </div>
+    <p id="message"></p>
+  </div>
+  <script>
+    const grid = [
+      ["THE COMMONS", "CAPPA NORTH", "NANOTECH BUILDING"],
+      ["MAVERICK ACTIVITIES CENTER", "CAPPA BUILDING", "FINE ARTS"],
+      ["TRINITY HALL", "CAPPA SOUTH", "TEXAS HALL"]
+    ];
+    const goal = "TRINITY HALL";
+
+    let buildings = {};
+    grid.forEach((row, r) =>
+      row.forEach((b, c) => buildings[b] = [r, c])
+    );
+
+    let starts = Object.keys(buildings).filter(b => b !== goal);
+    let start = starts[Math.floor(Math.random() * starts.length)];
+    let pos = [...buildings[start]];
+    let steps = 0;
+
+    function getLocation(pos) {
+      return grid[pos[0]][pos[1]];
+    }
+
+    function getDirections(pos) {
+      let dirs = [];
+      if (pos[0] > 0) dirs.push("N");
+      if (pos[0] < 2) dirs.push("S");
+      if (pos[1] > 0) dirs.push("W");
+      if (pos[1] < 2) dirs.push("E");
+      return dirs.join(", ");
+    }
+
+    function update() {
+      document.getElementById("location").textContent = `📍 Current Location: ${getLocation(pos)}`;
+      document.getElementById("available").textContent = `➡ Available directions: ${getDirections(pos)}`;
+    }
+
+    function move(dir) {
+      let [r, c] = pos;
+      if (dir === 'n' && r > 0) r--;
+      else if (dir === 's' && r < 2) r++;
+      else if (dir === 'e' && c < 2) c++;
+      else if (dir === 'w' && c > 0) c--;
+      else {
+        document.getElementById("message").textContent = "🚫 You can't move that way.";
+        return;
+      }
+      pos = [r, c];
+      steps++;
+      document.getElementById("message").textContent = "";
+
+      if (getLocation(pos) === goal) {
+        document.getElementById("location").textContent = `🎉 You reached TRINITY HALL in ${steps} steps!`;
+        document.getElementById("available").textContent = "";
+      } else {
+        update();
+      }
+    }
+
+    update();
+  </script>
+</body>
+</html>
