@@ -1,87 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Back to Home Game</title>
+  <meta charset="UTF-8">
+  <title>Back to Home - Campus Quest</title>
   <style>
-    body { font-family: sans-serif; text-align: center; }
-    #game { margin-top: 30px; }
-    .directions { margin: 10px; }
-    button { padding: 10px 20px; margin: 5px; }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #fdf6e3;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    img {
+      max-width: 500px;
+      margin: 20px auto;
+      display: block;
+    }
+    h1 {
+      font-size: 28px;
+      color: #333;
+    }
+    .directions {
+      margin: 15px 0;
+      font-size: 18px;
+    }
+    .button-container {
+      margin: 20px;
+    }
+    button {
+      font-size: 18px;
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #f9cb40;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ffdd75;
+    }
+    #output {
+      font-size: 18px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1>🎮 Campus Quest: "Back to Home"</h1>
-  <p>You're trying to reach TRINITY HALL. Use buttons below to move.</p>
-  <div id="game">
-    <p id="location">Loading...</p>
-    <p id="available"></p>
-    <div class="directions">
-      <button onclick="move('n')">⬆ North</button><br>
-      <button onclick="move('w')">⬅ West</button>
-      <button onclick="move('e')">➡ East</button><br>
-      <button onclick="move('s')">⬇ South</button>
-    </div>
-    <p id="message"></p>
+
+  <h1>🏁 Campus Quest: Back to Home</h1>
+  <p>🎒 Hey there, explorer! You’re a student who just finished a busy day.<br>
+  Your goal is to get back to your dorm — <strong>Trinity Hall</strong>!</p>
+
+  <img src="d55f942a-6845-430a-ba4e-3fef327f8994.png" alt="Campus Grid Map">
+
+  <div id="gameInfo">
+    <p><strong>Start:</strong> <span id="startLoc"></span></p>
+    <p><strong>Current:</strong> <span id="currentLoc"></span></p>
+    <p><strong>Steps:</strong> <span id="stepCount">0</span></p>
   </div>
+
+  <div class="button-container">
+    <button onclick="move('n')">⬆ North</button><br>
+    <button onclick="move('w')">⬅ West</button>
+    <button onclick="move('e')">➡ East</button><br>
+    <button onclick="move('s')">⬇ South</button>
+  </div>
+
+  <div id="output"></div>
+
   <script>
-    const grid = [
+    const campusGrid = [
       ["THE COMMONS", "CAPPA NORTH", "NANOTECH BUILDING"],
       ["MAVERICK ACTIVITIES CENTER", "CAPPA BUILDING", "FINE ARTS"],
       ["TRINITY HALL", "CAPPA SOUTH", "TEXAS HALL"]
     ];
+
     const goal = "TRINITY HALL";
-
-    let buildings = {};
-    grid.forEach((row, r) =>
-      row.forEach((b, c) => buildings[b] = [r, c])
-    );
-
-    let starts = Object.keys(buildings).filter(b => b !== goal);
-    let start = starts[Math.floor(Math.random() * starts.length)];
-    let pos = [...buildings[start]];
+    let playerPos;
     let steps = 0;
 
-    function getLocation(pos) {
-      return grid[pos[0]][pos[1]];
+    // Get all positions
+    const buildingMap = {};
+    for (let r = 0; r < campusGrid.length; r++) {
+      for (let c = 0; c < campusGrid[0].length; c++) {
+        buildingMap[campusGrid[r][c]] = [r, c];
+      }
     }
 
-    function getDirections(pos) {
-      let dirs = [];
-      if (pos[0] > 0) dirs.push("N");
-      if (pos[0] < 2) dirs.push("S");
-      if (pos[1] > 0) dirs.push("W");
-      if (pos[1] < 2) dirs.push("E");
-      return dirs.join(", ");
-    }
+    // Choose a random start position (not Trinity Hall)
+    const buildings = Object.keys(buildingMap).filter(b => b !== goal);
+    const start = buildings[Math.floor(Math.random() * buildings.length)];
+    playerPos = [...buildingMap[start]];
 
-    function update() {
-      document.getElementById("location").textContent = `📍 Current Location: ${getLocation(pos)}`;
-      document.getElementById("available").textContent = `➡ Available directions: ${getDirections(pos)}`;
-    }
+    document.getElementById("startLoc").textContent = start;
+    document.getElementById("currentLoc").textContent = start;
 
     function move(dir) {
-      let [r, c] = pos;
-      if (dir === 'n' && r > 0) r--;
-      else if (dir === 's' && r < 2) r++;
-      else if (dir === 'e' && c < 2) c++;
-      else if (dir === 'w' && c > 0) c--;
-      else {
-        document.getElementById("message").textContent = "🚫 You can't move that way.";
+      let [r, c] = playerPos;
+      if (dir === "n") r--;
+      else if (dir === "s") r++;
+      else if (dir === "e") c++;
+      else if (dir === "w") c--;
+
+      if (r < 0 || r > 2 || c < 0 || c > 2) {
+        document.getElementById("output").textContent = "🚫 You can't go that way!";
         return;
       }
-      pos = [r, c];
-      steps++;
-      document.getElementById("message").textContent = "";
 
-      if (getLocation(pos) === goal) {
-        document.getElementById("location").textContent = `🎉 You reached TRINITY HALL in ${steps} steps!`;
-        document.getElementById("available").textContent = "";
+      playerPos = [r, c];
+      steps++;
+      const current = campusGrid[r][c];
+      document.getElementById("currentLoc").textContent = current;
+      document.getElementById("stepCount").textContent = steps;
+
+      if (current === goal) {
+        document.getElementById("output").innerHTML = `<strong>🎉 You reached Trinity Hall in ${steps} steps!</strong>`;
       } else {
-        update();
+        document.getElementById("output").textContent = `You moved to ${current}`;
       }
     }
-
-    update();
   </script>
+
 </body>
 </html>
