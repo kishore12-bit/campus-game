@@ -75,12 +75,6 @@
       100% { background-color: transparent; }
     }
 
-    #pathTracker {
-      font-size: 16px;
-      margin-top: 15px;
-      color: #555;
-    }
-
     #restartBtn {
       display: none;
       margin-top: 20px;
@@ -127,8 +121,6 @@
 
   <button id="restartBtn" onclick="restartGame()">🔁 Restart Game</button>
 
-  <div id="pathTracker"><strong>Path visited:</strong> <span id="pathLog"></span></div>
-
   <script>
     const campusGrid = [
       ["THE COMMONS", "CAPPA NORTH", "NANOTECH BUILDING"],
@@ -139,7 +131,6 @@
     const goal = "TRINITY HALL";
     let playerPos;
     let steps = 0;
-    let path = [];
 
     const buildingMap = {};
     for (let r = 0; r < campusGrid.length; r++) {
@@ -151,11 +142,9 @@
     const buildings = Object.keys(buildingMap).filter(b => b !== goal);
     const start = buildings[Math.floor(Math.random() * buildings.length)];
     playerPos = [...buildingMap[start]];
-    path.push(start);
 
     document.getElementById("startLoc").textContent = start;
     document.getElementById("currentLoc").textContent = start;
-    document.getElementById("pathLog").textContent = start;
 
     function move(dir) {
       let [r, c] = playerPos;
@@ -174,8 +163,6 @@
       const current = campusGrid[r][c];
       document.getElementById("currentLoc").textContent = current;
       document.getElementById("stepCount").textContent = steps;
-      path.push(current);
-      document.getElementById("pathLog").textContent = path.join(" ➜ ");
 
       const output = document.getElementById("output");
       output.classList.remove("flash");
