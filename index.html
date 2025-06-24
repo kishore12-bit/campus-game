@@ -25,9 +25,10 @@
       color: #333;
     }
 
-    .directions {
-      margin: 15px 0;
+    #gameInfo {
       font-size: 18px;
+      color: #333;
+      margin-bottom: 20px;
     }
 
     .button-container {
@@ -52,6 +53,7 @@
     #output {
       font-size: 18px;
       margin-top: 20px;
+      margin-bottom: 10px;
       color: #333;
     }
   </style>
@@ -62,11 +64,14 @@
 
   <img src="./ChatGPT Image Jun 24, 2025, 12_23_56 AM.png" alt="Campus Grid Map">
 
-<div id="gameInfo">
-  <p><strong>Start Location:</strong> <span id="startLoc"></span> — this is where your journey begins.</p>
-  <p><strong>Current Location:</strong> <span id="currentLoc"></span> — you are here now. Use the buttons to navigate.</p>
-  <p><strong>Steps taken so far:</strong> <span id="stepCount">0</span></p>
-</div>
+  <div id="gameInfo">
+    <p><strong>Start Location:</strong> <span id="startLoc"></span> — this is where your journey begins.</p>
+    <p><strong>Current Location:</strong> <span id="currentLoc"></span> — you are here now. Use the buttons to navigate.</p>
+    <p><strong>Steps taken so far:</strong> <span id="stepCount">0</span></p>
+  </div>
+
+  <!-- OUTPUT message ABOVE buttons -->
+  <div id="output"></div>
 
   <div class="button-container">
     <button onclick="move('n')">⬆ North</button><br>
@@ -74,8 +79,6 @@
     <button onclick="move('e')">➡ East</button><br>
     <button onclick="move('s')">⬇ South</button>
   </div>
-
-  <div id="output"></div>
 
   <script>
     const campusGrid = [
