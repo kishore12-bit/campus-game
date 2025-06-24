@@ -11,22 +11,29 @@
       padding: 20px;
       text-align: center;
     }
+
     img {
       max-width: 500px;
       margin: 20px auto;
       display: block;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
+
     h1 {
       font-size: 28px;
       color: #333;
     }
+
     .directions {
       margin: 15px 0;
       font-size: 18px;
     }
+
     .button-container {
       margin: 20px;
     }
+
     button {
       font-size: 18px;
       margin: 5px;
@@ -35,17 +42,23 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.2s ease;
     }
+
     button:hover {
       background-color: #ffdd75;
     }
+
     #output {
       font-size: 18px;
       margin-top: 20px;
+      color: #333;
     }
   </style>
 </head>
 <body>
+
+  <h1>🎓 Back to Home: Campus Quest</h1>
 
   <img src="./ChatGPT Image Jun 24, 2025, 12_23_56 AM.png" alt="Campus Grid Map">
 
@@ -75,7 +88,6 @@
     let playerPos;
     let steps = 0;
 
-    // Get all positions
     const buildingMap = {};
     for (let r = 0; r < campusGrid.length; r++) {
       for (let c = 0; c < campusGrid[0].length; c++) {
@@ -83,7 +95,6 @@
       }
     }
 
-    // Choose a random start position (not Trinity Hall)
     const buildings = Object.keys(buildingMap).filter(b => b !== goal);
     const start = buildings[Math.floor(Math.random() * buildings.length)];
     playerPos = [...buildingMap[start]];
@@ -110,9 +121,9 @@
       document.getElementById("stepCount").textContent = steps;
 
       if (current === goal) {
-        document.getElementById("output").innerHTML = <strong>🎉 You reached Trinity Hall in ${steps} steps!</strong>;
+        document.getElementById("output").innerHTML = `<strong>🎉 You reached Trinity Hall in ${steps} steps!</strong>`;
       } else {
-        document.getElementById("output").textContent = You moved to ${current};
+        document.getElementById("output").textContent = `📍 You moved to ${current}`;
       }
     }
   </script>
